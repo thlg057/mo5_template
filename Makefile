@@ -30,7 +30,7 @@ REPO_SDK     := https://github.com/thlg057/sdk_mo5.git
 CMOC         := cmoc
 SDK_INC      := -I$(TOOLS_DIR)/include
 SDK_LIB      := $(TOOLS_DIR)/lib/libsdk_mo5.a
-CMOC_FLAGS   := --thommo --org=2600 -Wno-assign-in-condition $(SDK_INC)
+CMOC_FLAGS   := --thommo --org=2600 -Wno-assign-in-condition $(SDK_INC) -I$(INCLUDE_DIR)
 
 FD2SD        := python3 $(TOOLS_DIR)/scripts/fd2sd.py
 PNG2MO5      := python3 $(TOOLS_DIR)/scripts/png2mo5.py
@@ -79,6 +79,7 @@ install-bootfd:
 
 install-sdk:
 	@echo "--- Gestion du SDK MO5 ---"
+	@mkdir -p "$(INCLUDE_DIR)"
 	@mkdir -p "$(TOOLS_DIR)"
 	@if [ ! -d "$(SDK_DIR)" ]; then \
 		git clone $(REPO_SDK) "$(SDK_DIR)"; \
