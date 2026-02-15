@@ -15,6 +15,7 @@ It automates environment setup, SDK management, and the creation of bootable flo
 - **CMOC** : C compiler for the 6809 processor.
 - **Git** : Required to clone dependency tools during installation.
 - **Python 3** : Required for the `fd2sd.py` conversion script.
+- **Python 3 / Pillow** : Required for the `png2mo5.py` image conversion script.
 
 ## 🚀 Setup and Build
 

@@ -15,6 +15,7 @@ Il automatise l'installation de l'environnement, la gestion du SDK et la créati
 - **CMOC** : Le compilateur C pour processeur 6809.
 - **Git** : Requis pour cloner les outils de dépendance lors de l'installation.
 - **Python 3** : Requis pour le script de conversion `fd2sd.py`.
+- **Python 3 / Pillow** : Requis pour le script de traitement d'image `png2mo5.py`.
 
 ## 🚀 Configuration et Compilation
 

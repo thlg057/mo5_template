@@ -104,7 +104,7 @@ sudo apt install python3 python3-pip python3-venv
 Exemple :
 
 ```bash
-pip3 install requests
+pip install Pillow
 ```
 
 ---
