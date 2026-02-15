@@ -66,6 +66,33 @@ To use these functions in your code, include the exported header files:
 
 The `Makefile` automatically handles include paths (`-Itools/include`) and links the static library (`tools/lib/libsdk_mo5.a`) during compilation.
 
+## 🎨 PNG to Sprite Conversion
+
+The project includes a Python script that transforms a PNG image into a `.h` file containing the corresponding C sprite definition.
+
+To convert an image:
+
+```bash
+make convert IMG=./assets/sprite1.png
+```
+
+This command:
+- Analyzes the PNG image and automatically detects colors (2 colors per 8-pixel group)
+- Automatically generates the file `include/assets/sprite1.h` with the sprite definition
+- Creates necessary directories if needed
+- Preserves the folder structure (e.g., `./assets/char/hero.png` → `./include/assets/char/hero.h`)
+
+The generated file contains:
+- **FORM** data (1 bit/pixel bitmap)
+- **COLOR** data (attributes per 8-pixel group)
+- Comments with ASCII visualization of the sprite
+
+You can then include the generated file in your code:
+
+```c
+#include "assets/sprite1.h"
+```
+
 ## 🧹 Cleaning
 
 - `make clean` : Removes project build files (object files, binaries, and disk images).

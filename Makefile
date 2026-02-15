@@ -15,6 +15,7 @@ BOOTMO_BIN   := $(BOOTFD_DIR)/BOOTMO.BIN
 SRC_DIR      := src
 BIN_DIR      := bin
 OUTPUT_DIR   := output
+INCLUDE_DIR  := include
 
 # Fichiers cibles
 PROGRAM_BIN  := $(BIN_DIR)/$(PROGRAM).BIN
@@ -32,12 +33,13 @@ SDK_LIB      := $(TOOLS_DIR)/lib/libsdk_mo5.a
 CMOC_FLAGS   := --thommo --org=2600 -Wno-assign-in-condition $(SDK_INC)
 
 FD2SD        := python3 $(TOOLS_DIR)/scripts/fd2sd.py
+PNG2MO5      := python3 $(TOOLS_DIR)/scripts/png2mo5.py
 
 # ==========================================================
 # TARGETS
 # ==========================================================
 
-.PHONY: all clean install install-sdk install-bootfd clean-all
+.PHONY: all clean install install-sdk install-bootfd clean-all convert
 
 # Cible par défaut : construit l'image SD
 all: $(DISK_IMAGE_SD)
@@ -96,3 +98,16 @@ clean:
 clean-all: clean
 	@rm -rf $(TOOLS_DIR)
 	@echo "✓ Tout a été supprimé (Projet + Outils)"
+
+# --- CONVERSION D'IMAGES PNG VERS .H ---
+
+convert:
+	@if [ -z "$(IMG)" ]; then \
+		echo "Usage: make convert IMG=./assets/sprite.png"; \
+		exit 1; \
+	fi
+	$(eval HEADERFILE := $(INCLUDE_DIR)/$(IMG:.png=.h))
+	@mkdir -p $(INCLUDE_DIR)
+	@mkdir -p $(dir $(HEADERFILE))
+	$(PNG2MO5) $(IMG) --name $(HEADERFILE) --quiet
+	@echo "✓ Image convertie : $(HEADERFILE)"

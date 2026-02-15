@@ -66,6 +66,33 @@ Pour utiliser ces fonctions dans votre code, incluez les fichiers d'en-tête exp
 
 Le `Makefile` s'occupe automatiquement d'inclure les chemins (`-Itools/include`) et de lier la bibliothèque statique (`tools/lib/libsdk_mo5.a`) lors de la compilation.
 
+## 🎨 Conversion d'Images PNG en Sprites
+
+Le projet inclut un script Python qui transforme une image PNG en fichier `.h` contenant la définition C du sprite correspondant.
+
+Pour convertir une image :
+
+```bash
+make convert IMG=./assets/sprite.png
+```
+
+Cette commande :
+- Analyse l'image PNG et détecte automatiquement les couleurs (2 couleurs par groupe de 8 pixels)
+- Génère automatiquement le fichier `include/assets/sprite1.h` avec la définition du sprite
+- Crée les répertoires nécessaires si besoin
+- Préserve la structure de dossiers (ex: `./assets/perso/hero.png` → `./include/assets/perso/hero.h`)
+
+Le fichier généré contient :
+- Les données de **FORME** (bitmap 1 bit/pixel)
+- Les données de **COULEUR** (attributs par groupe de 8 pixels)
+- Les commentaires avec visualisation ASCII du sprite
+
+Vous pouvez ensuite inclure le fichier généré dans votre code :
+
+```c
+#include "assets/sprite1.h"
+```
+
 ## 🧹 Nettoyage
 
 - `make clean` : Supprime les fichiers de build du projet (fichiers objets, binaires et images disques).
