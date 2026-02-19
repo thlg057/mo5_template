@@ -1,6 +1,6 @@
 # 🕹️ Thomson MO5 Project Template
 
-Ce dépôt est un modèle (template) pour le développement de logiciels et de jeux sur **Thomson MO5** en langage C.  
+Ce dépôt est un modèle (template) pour le développement de logiciels et de jeux pour le **Thomson MO5** en langage C.  
 Il automatise l'installation de l'environnement, la gestion du SDK et la création d'images disques bootables.
 
 ## 📁 Structure du Projet
