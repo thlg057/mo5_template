@@ -39,7 +39,7 @@ PNG2MO5      := python3 $(TOOLS_DIR)/scripts/png2mo5.py
 # TARGETS
 # ==========================================================
 
-.PHONY: all clean install install-sdk install-bootfd clean-all convert
+.PHONY: all clean install install-sdk install-bootfd clean-all convert setup-codespace
 
 # Cible par défaut : construit l'image SD
 all: $(DISK_IMAGE_SD)
@@ -112,3 +112,41 @@ convert:
 	@mkdir -p $(dir $(HEADERFILE))
 	$(PNG2MO5) $(IMG) --name $(HEADERFILE) --quiet
 	@echo "✓ Image convertie : $(HEADERFILE)"
+
+# --- CONFIGURATION CODESPACE ---
+
+setup-codespace:
+	@echo "=========================================="
+	@echo "Installation des prérequis pour Codespace"
+	@echo "=========================================="
+	@echo ""
+	@echo "→ Mise à jour des paquets..."
+	-sudo apt update
+	@echo ""
+	@echo "→ Installation de flex..."
+	sudo apt install -y flex
+	@echo ""
+	@echo "→ Installation de Pillow (Python)..."
+	pip install Pillow
+	@echo ""
+	@echo "→ Téléchargement et installation de lwtools..."
+	wget -q http://www.lwtools.ca/releases/lwtools/lwtools-4.24.tar.gz
+	tar -xzf lwtools-4.24.tar.gz
+	rm lwtools-4.24.tar.gz
+	cd lwtools-4.24 && make && sudo make install && cd ..
+	rm -rf lwtools-4.24
+	@echo ""
+	@echo "→ Téléchargement et installation de CMOC..."
+	wget -q http://gvlsywt.cluster051.hosting.ovh.net/dev/cmoc-0.1.97.tar.gz
+	tar -xzf cmoc-0.1.97.tar.gz
+	rm cmoc-0.1.97.tar.gz
+	cd cmoc-0.1.97 && ./configure && make && sudo make install && cd ..
+	rm -rf cmoc-0.1.97
+	@echo ""
+	@echo "=========================================="
+	@echo "✓ Configuration Codespace terminée !"
+	@echo "=========================================="
+	@echo ""
+	@echo "Vous pouvez maintenant exécuter:"
+	@echo "  make install    # Pour installer le SDK"
+	@echo "  make            # Pour compiler le projet"

@@ -14,7 +14,21 @@ Il automatise l'installation de l'environnement, la gestion du SDK et la créati
 
 - **CMOC** : Le compilateur C pour processeur 6809.
 - **Git** : Requis pour cloner les outils de dépendance lors de l'installation.
-- **Python 3** : Requis pour le script de conversion `fd2sd.py`.
+- **Python 3 / Pillow** : Requis pour les scripts de conversion (`fd2sd.py` et `png2mo5.py`).
+
+### 📦 Installation sur GitHub Codespaces
+
+Si vous utilisez GitHub Codespaces, vous pouvez installer automatiquement tous les prérequis avec :
+
+```bash
+make setup-codespace
+```
+
+Cette commande installe :
+- **flex** (requis pour lwtools)
+- **Pillow** (bibliothèque Python pour la conversion d'images)
+- **lwtools** (assembleur 6809)
+- **CMOC** (compilateur C pour 6809)
 - **Python 3 / Pillow** : Requis pour le script de traitement d'image `png2mo5.py`.
 
 ## 🚀 Configuration et Compilation
