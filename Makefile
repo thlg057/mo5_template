@@ -4,6 +4,9 @@
 
 PROGRAM      := MYAPP
 
+# Version du SDK compatible avec ce projet (format MAJEUR.MINEUR.x)
+SDK_COMPAT_VERSION := 1.0
+
 # Chemins des outils externes
 TOOLS_DIR    := $(CURDIR)/tools
 BOOTFD_DIR   := $(TOOLS_DIR)/BootFloppyDisk
@@ -83,13 +86,23 @@ install-bootfd:
 	@$(MAKE) -C "$(BOOTFD_DIR)"
 
 install-sdk:
-	@echo "--- Gestion du SDK MO5 ---"
+	@echo "--- Gestion du SDK MO5 (compatible v$(SDK_COMPAT_VERSION).x) ---"
 	@mkdir -p "$(INCLUDE_DIR)"
 	@mkdir -p "$(TOOLS_DIR)"
 	@if [ ! -d "$(SDK_DIR)" ]; then \
 		git clone $(REPO_SDK) "$(SDK_DIR)"; \
+	else \
+		cd "$(SDK_DIR)" && git fetch --tags; \
 	fi
-	@cd "$(SDK_DIR)" && git pull
+	@echo "--- Recherche du dernier tag compatible v$(SDK_COMPAT_VERSION).x ---"
+	@cd "$(SDK_DIR)" && \
+		LATEST_TAG=$$(git tag --list "v$(SDK_COMPAT_VERSION).*" | sort -V | tail -n1); \
+		if [ -z "$$LATEST_TAG" ]; then \
+			echo "⚠ Aucun tag v$(SDK_COMPAT_VERSION).x trouvé, utilisation de la branche principale."; \
+		else \
+			echo "→ Checkout $$LATEST_TAG"; \
+			git checkout $$LATEST_TAG; \
+		fi
 	@echo "--- Build et Export vers $(TOOLS_DIR) ---"
 	$(MAKE) export_sdk DIST_DIR="$(TOOLS_DIR)" -C "$(SDK_DIR)"
 	rm -rf $(SDK_DIR)
