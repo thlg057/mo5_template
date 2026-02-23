@@ -5,7 +5,7 @@
 PROGRAM      := MYAPP
 
 # Version du SDK compatible avec ce projet (format MAJEUR.MINEUR.x)
-SDK_COMPAT_VERSION := 1.0
+SDK_COMPAT_VERSION := 1.1
 
 # Chemins des outils externes
 TOOLS_DIR    := $(CURDIR)/tools

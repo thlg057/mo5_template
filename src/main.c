@@ -36,24 +36,6 @@
  * MAIN PROGRAM
  * ======================================== */
 
-void mo5_clear_buffer(char* buffer, int size)
-{
-    int i;
-    for (i = 0; i < size; i++) {
-        buffer[i] = '\0';
-    }
-}
-
-void mo5_wait_key(char key)
-{
-    char ch;
-
-    // Wait for the specific key - ignore all invalid characters
-    do {
-        ch = getchar();
-    } while (ch != key);
-}
-
 int main(void)
 {
     char name[MAX_NAME_LENGTH + 1];  // +1 for null terminator
@@ -62,7 +44,6 @@ int main(void)
     while (1) {
         // Clear screen for clean display
         clrscr();
-        //mo5_clear_buffer(name, MAX_NAME_LENGTH + 1);
         memset(name, 0, MAX_NAME_LENGTH + 1);
         // Display welcome prompt
         fputs("What is your first name?\r\n");
