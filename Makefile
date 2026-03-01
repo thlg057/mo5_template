@@ -2,10 +2,10 @@
 # Projet Thomson MO5 - Build & SDK Management
 # ==========================================================
 
-PROGRAM      := MYAPP
+PROGRAM      := SPRITE
 
 # Version du SDK compatible avec ce projet (format MAJEUR.MINEUR.x)
-SDK_COMPAT_VERSION := 1.1
+SDK_COMPAT_VERSION := 1.2
 
 # Chemins des outils externes
 TOOLS_DIR    := $(CURDIR)/tools
@@ -37,6 +37,9 @@ CMOC_FLAGS   := --thommo --org=2600 -Wno-assign-in-condition $(SDK_INC) -I$(INCL
 
 FD2SD        := python3 $(TOOLS_DIR)/scripts/fd2sd.py
 PNG2MO5      := python3 $(TOOLS_DIR)/scripts/png2mo5.py
+
+# Options additionnelles pour le convertisseur (ex: --transparent)
+CONVERT_OPTS ?=
 
 # Fichiers sources du projet
 # A compléter avec vos .c et .h
@@ -128,7 +131,7 @@ convert:
 	$(eval HEADERFILE := $(INCLUDE_DIR)/$(IMG:.png=.h))
 	@mkdir -p $(INCLUDE_DIR)
 	@mkdir -p $(dir $(HEADERFILE))
-	$(PNG2MO5) $(IMG) --name $(HEADERFILE) --quiet
+	$(PNG2MO5) $(IMG) --name $(HEADERFILE) $(CONVERT_OPTS) --quiet
 	@echo "✓ Image convertie : $(HEADERFILE)"
 
 # --- CONFIGURATION CODESPACE ---
