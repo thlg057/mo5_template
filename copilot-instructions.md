@@ -80,6 +80,7 @@ When developing MO5 C programs with this template:
 - **Convert to sprite**: Use `make convert IMG=./assets/sprite.png`
 - **Output**: Creates a `.h` file in `./include/` with sprite data structures
 - **⚠️ IMPORTANT**: After converting a PNG to sprite header, **add the generated `.h` file to `PROJ_HDR` in the Makefile**
+- Do not only include it in source code: it must be listed in `PROJ_HDR` so that `make` detects the dependency.
   - Example: If you convert `assets/player.png`, it creates `include/assets/player.h`
   - You must then add it to Makefile:
     ```makefile
