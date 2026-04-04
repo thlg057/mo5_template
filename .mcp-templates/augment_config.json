@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "mo5-rag": {
+      "command": "node",
+      "args": ["/srv/dev-disk-by-uuid-8a747308-0fd1-4223-b1be-09ccfdf4bad1/sources/mo5/mo5_ai/tools/mcp_mo5/index.js"],
+      "env": {
+        "RAG_BASE_URL": "https://retrocomputing-ai.cloud"
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 # Projet Thomson MO5 - Build & SDK Management
 # ==========================================================
 
-PROGRAM      := SPRITE
+PROGRAM      := MYAPP
 
 # Version du SDK compatible avec ce projet (format MAJEUR.MINEUR.x)
 SDK_COMPAT_VERSION := 1.2
@@ -11,6 +11,7 @@ SDK_COMPAT_VERSION := 1.2
 TOOLS_DIR    := $(CURDIR)/tools
 BOOTFD_DIR   := $(TOOLS_DIR)/BootFloppyDisk
 SDK_DIR      := $(TOOLS_DIR)/sdk_mo5
+MCP_DIR      := $(TOOLS_DIR)/mcp_mo5
 FDFS         := $(BOOTFD_DIR)/tools/fdfs
 BOOTMO_BIN   := $(BOOTFD_DIR)/BOOTMO.BIN
 
@@ -28,6 +29,7 @@ DISK_IMAGE_SD:= $(OUTPUT_DIR)/$(PROGRAM).sd
 # Variables pour les dépôts
 REPO_BOOTFD  := https://github.com/OlivierP-To8/BootFloppyDisk.git
 REPO_SDK     := https://github.com/thlg057/sdk_mo5.git
+REPO_MCP     := https://github.com/thlg057/mo5-mcp-server.git
 
 # Paramètres du compilateur (Intégration du SDK)
 CMOC         := cmoc
@@ -79,7 +81,7 @@ $(DISK_IMAGE_SD): $(DISK_IMAGE)
 
 # --- GESTION DE L'INSTALLATION (SDK & TOOLS) ---
 
-install: install-bootfd install-sdk
+install: install-bootfd install-sdk install-mcp
 
 install-bootfd:
 	@mkdir -p "$(TOOLS_DIR)"
@@ -111,6 +113,11 @@ install-sdk:
 	rm -rf $(SDK_DIR)
 	@echo "✓ SDK installé et exporté."
 
+install-mcp:
+	@mkdir -p "$(TOOLS_DIR)"
+	@if [ ! -d "$(MCP_DIR)" ]; then \
+		git clone $(REPO_MCP) "$(MCP_DIR)"; \
+	fi
 # --- NETTOYAGE ---
 
 clean:
