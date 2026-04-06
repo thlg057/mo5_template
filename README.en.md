@@ -1,18 +1,18 @@
 # 🕹️ Thomson MO5 Project Template
 
-This repository is a template for developing software and games for the **Thomson MO5** using the C programming language.  
-It automates environment setup, SDK management, and the creation of bootable floppy disk images.
+This repository is a template for developing software and games for the **Thomson MO5** using the C language.  
+It automates environment setup, SDK management, and the creation of bootable disk images.
 
 ## 📁 Project Structure
 
-- **src/** : Contains the source code of your application (e.g. `main.c`).
-- **tools/** : Generated directory containing the SDK (libraries and headers) as well as conversion utilities.
-- **bin/** : Contains the compiled `.BIN` executable.
-- **output/** : Contains the final floppy disk images in `.fd` and `.sd` formats.
+- **src/** : Contains your application source code (e.g. `main.c`).
+- **tools/** : Generated folder containing the SDK (libraries and headers) as well as conversion utilities.
+- **bin/** : Contains the `.BIN` executable after compilation.
+- **output/** : Contains the final disk images in `.fd` and `.sd` formats.
 
-## 🛠️ Requirements
+## 🛠️ Prerequisites
 
-- **CMOC** : C compiler for the 6809 processor.
+- **CMOC** : The C compiler for the 6809 processor.
 - **Git** : Required to clone dependency tools during installation.
 - **Python 3 / Pillow** : Required for conversion scripts (`fd2sd.py` and `png2mo5.py`).
 
@@ -29,8 +29,9 @@ This command installs:
 - **Pillow** (Python library for image conversion)
 - **lwtools** (6809 assembler)
 - **CMOC** (C compiler for 6809)
+- **Python 3 / Pillow** : Required for the image processing script `png2mo5.py`.
 
-## 🚀 Setup and Build
+## 🚀 Setup and Compilation
 
 ### 1. Customization
 
@@ -40,7 +41,7 @@ Open the `Makefile` at the root of the project and modify the following variable
 PROGRAM := MYAPP
 ```
 
-(Replace `MYAPP` with the desired name.)
+(Replace `MYAPP` with your desired name.)
 
 ### 2. Environment Installation
 
@@ -51,25 +52,23 @@ make install
 ```
 
 This command:
-- downloads and uses the **BootFloppyDisk** project to generate bootable floppy disk images  
-  👉 https://github.com/OlivierP-To8/BootFloppyDisk.git
-- compiles **sdk_mo5**, which is based on the *helper* code developed to simplify development on the Thomson MO5  
+- downloads and compiles the **sdk_mo5**, an SDK designed to simplify development on Thomson MO5. The SDK also includes Python scripts to generate disk files in fd and sd formats (compatible with SDDrive)
   👉 https://github.com/thlg057/sdk_mo5.git
-- exports all required files into the `tools/` directory
+- exports all necessary files into the `tools/` folder
 
-### 3. Project Build
+### 3. Project Compilation
 
-To generate your program and disk images, simply run:
+To generate your program and disk images, simply use:
 
 ```bash
 make
 ```
 
-This will compile your source code, link it against the SDK library, and create the storage files in the `output/` directory.
+This action will compile your source code, link it with the SDK library, and create disk images (.fd and .sd) in the `output/` folder.
 
 ## 📖 SDK Usage
 
-The **mo5_sdk** is built on top of the *helper* code from the **sdk_mo5** project, which groups together a set of functions I developed to make Thomson MO5 development easier and faster.
+The **mo5_sdk** is based on the *helper* code from the **sdk_mo5** project, which gathers a set of functions I developed to simplify and speed up development on Thomson MO5.
 
 To use these functions in your code, include the exported header files:
 
@@ -80,25 +79,25 @@ To use these functions in your code, include the exported header files:
 
 The `Makefile` automatically handles include paths (`-Itools/include`) and links the static library (`tools/lib/libsdk_mo5.a`) during compilation.
 
-## 🎨 PNG to Sprite Conversion
+## 🎨 PNG Image to Sprite Conversion
 
-The project includes a Python script that transforms a PNG image into a `.h` file containing the corresponding C sprite definition.
+The project includes a Python script that converts a PNG image into a `.h` file containing the C definition of the corresponding sprite.
 
 To convert an image:
 
 ```bash
-make convert IMG=./assets/sprite1.png
+make convert IMG=./assets/sprite.png
 ```
 
 This command:
-- Analyzes the PNG image and automatically detects colors (2 colors per 8-pixel group)
+- Analyzes the PNG image and automatically detects colors (2 colors per group of 8 pixels)
 - Automatically generates the file `include/assets/sprite1.h` with the sprite definition
 - Creates necessary directories if needed
-- Preserves the folder structure (e.g., `./assets/char/hero.png` → `./include/assets/char/hero.h`)
+- Preserves the folder structure (e.g. `./assets/perso/hero.png` → `./include/assets/perso/hero.h`)
 
 The generated file contains:
-- **FORM** data (1 bit/pixel bitmap)
-- **COLOR** data (attributes per 8-pixel group)
+- **SHAPE** data (1 bit/pixel bitmap)
+- **COLOR** data (attributes per group of 8 pixels)
 - Comments with ASCII visualization of the sprite
 
 You can then include the generated file in your code:
@@ -110,4 +109,57 @@ You can then include the generated file in your code:
 ## 🧹 Cleaning
 
 - `make clean` : Removes project build files (object files, binaries, and disk images).
-- `make clean-all` : Removes the entire project, including the `tools/` directory (SDK and tools included).
+- `make clean-all` : Removes the entire project including the `tools/` folder (SDK and tools included).
+
+## MO5 MCP Server (RAG & Build Toolchain)
+
+This MCP server (Model Context Protocol) acts as a bridge between modern AI agents (Claude Desktop, Augment, Cursor) and the Thomson MO5 ecosystem.  
+It allows access to an expert knowledge base and manipulation of MO5 heritage files.
+
+### 🏗️ MO5 Development Ecosystem
+
+This server is part of a complete toolchain for modern 6809 development:
+
+- **SDK MO5** : https://github.com/thlg057/sdk_mo5  
+  C library optimized for CMOC.
+- **MO5 Project Template** : https://github.com/thlg057/mo5_template  
+  Project template with automated Makefile.
+- **This MCP Server** : The assistant that connects everything, answers technical questions, and generates assets.
+
+### 🌐 RAG Infrastructure (Artificial Intelligence)
+
+The server relies on a Retrieval-Augmented Generation architecture to provide accurate answers based on real technical documentation.
+
+#### Public Instance (Recommended)
+
+The service is publicly available for the community: https://retrocomputing-ai.cloud/
+
+### 🤖 AI Assistant Configuration (MCP)
+
+This project supports the **Model Context Protocol (MCP)**, allowing you to use Claude, Augment, or Cursor as a Thomson MO5 expert capable of compiling your code and handling your disk images.
+
+#### 1. Automatic Installation
+
+The project includes automation to configure your environment with a single command:
+
+```bash
+make install-mcp
+```
+
+This command will:
+
+- Clone or update the MCP server in your `tools/` folder.
+- Install required Node.js dependencies.
+- Generate your personalized configuration files with absolute paths to your current project.
+
+#### 2. Activation in Your Agent
+
+Once installation is complete, you need to tell your agent where to find the server.
+
+👉 Follow the detailed guide: `MCP_SETUP.md` (`./MCP_SETUP.md`) to complete the integration in a few clicks.
+
+### 📂 Project Structure
+
+- `index.js` : MCP server logic (Node.js).
+- `scripts/` : Python conversion engine (`makefd.py`, `fd2sd.py`, `png2mo5.py`).
+- `package.json` : npm dependencies and metadata.

@@ -52,9 +52,7 @@ make install
 ```
 
 Cette commande :
-- télécharge et utilise le projet **BootFloppyDisk** pour la génération des images disquettes bootables  
-  👉 https://github.com/OlivierP-To8/BootFloppyDisk.git
-- compile le **sdk_mo5**, basé sur le code *helper* développé pour faciliter le développement sur Thomson MO5  
+- télécharge et compile le **sdk_mo5**, sdk permettant de faciliter le développement sur Thomson MO5. Le sdk inclus aussi des scripts python permettant de générer les fichiers disquettes du type fd et sd (compatible avec SDDrive)
   👉 https://github.com/thlg057/sdk_mo5.git
 - exporte l'ensemble des fichiers nécessaires dans le dossier `tools/`
 
@@ -66,7 +64,7 @@ Pour générer votre programme et les images disques, utilisez simplement :
 make
 ```
 
-Cette action va compiler votre code source, le lier à la bibliothèque SDK et créer les fichiers de stockage dans le dossier `output/`.
+Cette action va compiler votre code source, le lier à la bibliothèque SDK et créer les images disquette (.fd et .sd) dans le dossier `output/`.
 
 ## 📖 Utilisation du SDK
 
@@ -112,3 +110,57 @@ Vous pouvez ensuite inclure le fichier généré dans votre code :
 
 - `make clean` : Supprime les fichiers de build du projet (fichiers objets, binaires et images disques).
 - `make clean-all` : Supprime tout le projet ainsi que le dossier `tools/` (SDK et outils inclus).
+
+## MO5 MCP Server (RAG & Build Toolchain)
+
+Ce serveur MCP (Model Context Protocol) est le pont entre les agents IA modernes (Claude Desktop, Augment, Cursor) et l'univers du Thomson MO5.  
+Il permet de consulter une base de connaissances experte et de manipuler les fichiers du patrimoine MO5.
+
+### 🏗️ L'Écosystème de Développement MO5
+
+Ce serveur fait partie d'une suite d'outils complète pour le développement moderne sur 6809 :
+
+- **SDK MO5** : https://github.com/thlg057/sdk_mo5  
+  Librairie C optimisée pour CMOC.
+- **MO5 Project Template** : https://github.com/thlg057/mo5_template  
+  Canevas de projet avec Makefile automatisé.
+- **Ce Serveur MCP** : L'assistant qui fait le lien, répond aux questions techniques et génère les assets.
+
+### 🌐 Infrastructure RAG (Intelligence Artificielle)
+
+Le serveur s'appuie sur une architecture de Retrieval-Augmented Generation pour fournir des réponses précises basées sur la documentation technique réelle.
+
+#### Instance Publique (Recommandée)
+
+Le service est déployé publiquement pour la communauté : https://retrocomputing-ai.cloud/
+
+### 🤖 Configuration de l'Assistant IA (MCP)
+
+Ce projet supporte le **Model Context Protocol (MCP)**, vous permettant d'utiliser Claude, Augment ou Cursor comme un expert Thomson MO5 capable de compiler votre code et de manipuler vos images disquettes.
+
+#### 1. Installation automatique
+
+Le projet inclut une automatisation pour configurer votre environnement en une seule commande :
+
+```bash
+make install-mcp
+```
+
+Cette commande va :
+
+- Cloner ou mettre à jour le serveur MCP dans votre dossier `tools/`.
+- Installer les dépendances Node.js nécessaires.
+- Générer vos fichiers de configuration personnalisés avec les chemins absolus vers votre projet actuel.
+
+#### 2. Activation dans votre Agent
+
+Une fois l'installation terminée, vous devez indiquer à votre agent où trouver le serveur.
+
+👉 Suivez le guide détaillé : `MCP_SETUP.md` (`./MCP_SETUP.md`) pour finaliser l'intégration en quelques clics.
+
+
+### 📂 Structure du Projet
+
+- `index.js` : Logique du serveur MCP (Node.js).
+- `scripts/` : Moteur de conversion Python (`makefd.py`, `fd2sd.py`, `png2mo5.py`).
+- `package.json` : Dépendances et métadonnées npm.

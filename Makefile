@@ -5,15 +5,15 @@
 PROGRAM      := MYAPP
 
 # Version du SDK compatible avec ce projet (format MAJEUR.MINEUR.x)
-SDK_COMPAT_VERSION := 1.2
+SDK_COMPAT_VERSION := 1.3
 
 # Chemins des outils externes
 TOOLS_DIR    := $(CURDIR)/tools
-BOOTFD_DIR   := $(TOOLS_DIR)/BootFloppyDisk
 SDK_DIR      := $(TOOLS_DIR)/sdk_mo5
 MCP_DIR      := $(TOOLS_DIR)/mcp_mo5
-FDFS         := $(BOOTFD_DIR)/tools/fdfs
-BOOTMO_BIN   := $(BOOTFD_DIR)/BOOTMO.BIN
+VSCODE_DIR   := $(CURDIR)/.vscode
+AI_CFG_DIR   := $(CURDIR)/.mcp-templates
+
 
 # Répertoires du projet
 SRC_DIR      := src
@@ -27,7 +27,6 @@ DISK_IMAGE   := $(OUTPUT_DIR)/$(PROGRAM).fd
 DISK_IMAGE_SD:= $(OUTPUT_DIR)/$(PROGRAM).sd
 
 # Variables pour les dépôts
-REPO_BOOTFD  := https://github.com/OlivierP-To8/BootFloppyDisk.git
 REPO_SDK     := https://github.com/thlg057/sdk_mo5.git
 REPO_MCP     := https://github.com/thlg057/mo5-mcp-server.git
 
@@ -39,6 +38,7 @@ CMOC_FLAGS   := --thommo --org=2600 -Wno-assign-in-condition $(SDK_INC) -I$(INCL
 
 FD2SD        := python3 $(TOOLS_DIR)/scripts/fd2sd.py
 PNG2MO5      := python3 $(TOOLS_DIR)/scripts/png2mo5.py
+MAKEFD       := python3 $(TOOLS_DIR)/scripts/makefd.py
 
 # Options additionnelles pour le convertisseur (ex: --transparent)
 CONVERT_OPTS ?=
@@ -70,7 +70,7 @@ $(PROGRAM_BIN): $(PROJ_SRC) $(PROJ_HDR) $(SDK_LIB)
 $(DISK_IMAGE): $(PROGRAM_BIN)
 	@mkdir -p $(OUTPUT_DIR)
 	@echo "Génération de l'image disquette .fd..."
-	@$(FDFS) -addBL $@ $(BOOTMO_BIN) $(PROGRAM_BIN)
+	@$(MAKEFD) $@ $(PROGRAM_BIN)
 	@echo "✓ Image .fd prête : $@"
 
 # Conversion .fd vers .sd
@@ -81,14 +81,7 @@ $(DISK_IMAGE_SD): $(DISK_IMAGE)
 
 # --- GESTION DE L'INSTALLATION (SDK & TOOLS) ---
 
-install: install-bootfd install-sdk install-mcp
-
-install-bootfd:
-	@mkdir -p "$(TOOLS_DIR)"
-	@if [ ! -d "$(BOOTFD_DIR)" ]; then \
-		git clone $(REPO_BOOTFD) "$(BOOTFD_DIR)"; \
-	fi
-	@$(MAKE) -C "$(BOOTFD_DIR)"
+install: install-sdk
 
 install-sdk:
 	@echo "--- Gestion du SDK MO5 (compatible v$(SDK_COMPAT_VERSION).x) ---"
@@ -117,7 +110,18 @@ install-mcp:
 	@mkdir -p "$(TOOLS_DIR)"
 	@if [ ! -d "$(MCP_DIR)" ]; then \
 		git clone $(REPO_MCP) "$(MCP_DIR)"; \
+	else \
+		cd "$(MCP_DIR)" && git fetch --tags; \
 	fi
+	cd "$(MCP_DIR)" && npm install
+	@mkdir -p "$(VSCODE_DIR)"
+	@mkdir -p "$(AI_CFG_DIR)"
+	@sed "s@\[replace_by_your_path\]@$(MCP_DIR)@g" "$(MCP_DIR)/templates/vscode_config.json" > "$(VSCODE_DIR)/settings.json"
+	@sed "s@\[replace_by_your_path\]@$(MCP_DIR)@g" "$(MCP_DIR)/templates/augment_config.json" > "$(AI_CFG_DIR)/augment_config_config.json"
+	@sed "s@\[replace_by_your_path\]@$(MCP_DIR)@g" "$(MCP_DIR)/templates/claude_desktop_config.json" > "$(AI_CFG_DIR)/claude_desktop_config.json"
+	cp "$(MCP_DIR)/templates/MCP_SETUP.md" "./MCP_SETUP.md"
+	cp "$(MCP_DIR)/templates/README.md" "$(AI_CFG_DIR)/README.md"
+	@echo "✓ Serveur MCP installé dans $(MCP_DIR)"
 # --- NETTOYAGE ---
 
 clean:
