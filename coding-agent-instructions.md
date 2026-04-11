@@ -4,6 +4,17 @@
 
 These instructions help a coding agent understand and work with MO5 C programming projects. The Thomson MO5 is a retro-computer, and development requires knowledge of the MO5 SDK and various asset transformation tools.
 
+## ⚠️ MO5 Hardware Constraints
+
+Before writing any code, keep these constraints in mind at all times:
+
+- **RAM**: 48KB total — code + data must fit. Every byte counts.
+- **Graphics**: 320x200 pixels, but only **2 colors per 8-pixel block** (not per pixel). This is a fundamental hardware limitation, not a software choice.
+- **No stdlib**: Do not use `printf`, `malloc`, `free`, `string.h`, `stdlib.h` etc. Use SDK equivalents exclusively.
+- **Stack**: Limited — avoid deep recursion and large local arrays.
+- **No dynamic allocation**: There is no heap. All memory must be statically allocated.
+- **Performance**: The 6809 runs at ~1 MHz. Avoid unnecessary loops, floating point, and heavy computations in the main loop.
+
 ## MO5 SDK Documentation
 
 The MO5 C SDK provides the following modules (referenced in `tools/docs/`):
@@ -32,8 +43,7 @@ All header files (.h) are located in `tools/include/`.
 **The `tools/` directory contains:**
 - SDK headers and libraries (`tools/include/`, `tools/lib/`)
 - SDK documentation (`tools/docs/`)
-- External tools and compilers (BootFloppyDisk, scripts)
-- MCP server (`tools/mcp_mo5/`)
+- External tools and scripts (`tools/scripts/`)
 
 **❌ DO NOT modify any files in `tools/`** — These are external dependencies and infrastructure.
 
@@ -47,10 +57,18 @@ Modifying tools can break the build system or corrupt the SDK.
 
 ## Knowledge Resources
 
-The **mo5-rag** MCP server provides:
-- Retrieval Augmented Generation (RAG) for MO5 knowledge queries
-- Access to MO5 development patterns and best practices
-- Query the server when needing contextual information about MO5 programming
+The **mo5-rag** MCP server gives you direct access to the MO5 knowledge base:
+- MO5 official hardware and system documentation
+- CMOC compiler reference
+- SDK module documentation (same content as `tools/docs/`, but queryable in natural language)
+- Game development how-tos: VBL, RLE compression, collision detection, memory optimizations, sprite patterns
+
+**Use the MCP server whenever you need:**
+- Implementation guidance on a specific SDK function
+- Clarification on a hardware constraint or behavior
+- Help with a pattern specific to MO5 game development
+
+The server is available at `https://retrocomputing-ai.cloud` and requires no configuration beyond what is already set up in your MCP client.
 
 ## Build System Rules
 
@@ -66,7 +84,7 @@ When developing MO5 C programs with this template:
 - **Output files**: Will be named after this variable (e.g., `MYGAME.BIN`, `MYGAME.fd`, `MYGAME.sd`)
 
 ### Program Structure
-- **main() must contain**: `while (1) { /* your code */ }` - otherwise the program exits immediately
+- **main() must contain**: `while (1) { /* your code */ }` — otherwise the program exits immediately
 - All program logic goes inside the infinite loop
 
 ### File Organization
@@ -95,6 +113,7 @@ When developing MO5 C programs with this template:
 - When converting PNG assets to sprites, ensure the background pixels have `foreground = 0x0` for transparency to work
 - Example functions: `mo5_actor_draw_bg()`, `mo5_actor_move_bg()`, `mo5_actor_clear_bg()`
 - See `tools/docs/mo5_sprite_bg_h.md` for detailed API documentation
+
 ### Adding Files
 If you add new source files:
 1. Create `.c` files in `./src/` and add to `PROJ_SRC` in Makefile

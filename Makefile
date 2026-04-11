@@ -106,22 +106,6 @@ install-sdk:
 	rm -rf $(SDK_DIR)
 	@echo "✓ SDK installé et exporté."
 
-install-mcp:
-	@mkdir -p "$(TOOLS_DIR)"
-	@if [ ! -d "$(MCP_DIR)" ]; then \
-		git clone $(REPO_MCP) "$(MCP_DIR)"; \
-	else \
-		cd "$(MCP_DIR)" && git fetch --tags; \
-	fi
-	cd "$(MCP_DIR)" && npm install
-	@mkdir -p "$(VSCODE_DIR)"
-	@mkdir -p "$(AI_CFG_DIR)"
-	@sed "s@\[replace_by_your_path\]@$(MCP_DIR)@g" "$(MCP_DIR)/templates/vscode_config.json" > "$(VSCODE_DIR)/settings.json"
-	@sed "s@\[replace_by_your_path\]@$(MCP_DIR)@g" "$(MCP_DIR)/templates/augment_config.json" > "$(AI_CFG_DIR)/augment_config_config.json"
-	@sed "s@\[replace_by_your_path\]@$(MCP_DIR)@g" "$(MCP_DIR)/templates/claude_desktop_config.json" > "$(AI_CFG_DIR)/claude_desktop_config.json"
-	cp "$(MCP_DIR)/templates/MCP_SETUP.md" "./MCP_SETUP.md"
-	cp "$(MCP_DIR)/templates/README.md" "$(AI_CFG_DIR)/README.md"
-	@echo "✓ Serveur MCP installé dans $(MCP_DIR)"
 # --- NETTOYAGE ---
 
 clean:

@@ -111,55 +111,40 @@ You can then include the generated file in your code:
 - `make clean` : Removes project build files (object files, binaries, and disk images).
 - `make clean-all` : Removes the entire project including the `tools/` folder (SDK and tools included).
 
-## MO5 MCP Server (RAG & Build Toolchain)
+## 🤖 AI Assistant Integration (MCP)
 
-This MCP server (Model Context Protocol) acts as a bridge between modern AI agents (Claude Desktop, Augment, Cursor) and the Thomson MO5 ecosystem.  
-It allows access to an expert knowledge base and manipulation of MO5 heritage files.
+This template is designed to work with the **Model Context Protocol (MCP)**.  
+Connect your AI coding agent (Claude Desktop, Cursor, Augment…) to the MO5 
+knowledge base, and it instantly becomes an expert: 6809, CMOC, SDK, 
+game development patterns, and more.
 
-### 🏗️ MO5 Development Ecosystem
+### Configuration
 
-This server is part of a complete toolchain for modern 6809 development:
+Just add this to your agent's configuration file:
 
-- **SDK MO5** : https://github.com/thlg057/sdk_mo5  
-  C library optimized for CMOC.
-- **MO5 Project Template** : https://github.com/thlg057/mo5_template  
-  Project template with automated Makefile.
-- **This MCP Server** : The assistant that connects everything, answers technical questions, and generates assets.
-
-### 🌐 RAG Infrastructure (Artificial Intelligence)
-
-The server relies on a Retrieval-Augmented Generation architecture to provide accurate answers based on real technical documentation.
-
-#### Public Instance (Recommended)
-
-The service is publicly available for the community: https://retrocomputing-ai.cloud/
-
-### 🤖 AI Assistant Configuration (MCP)
-
-This project supports the **Model Context Protocol (MCP)**, allowing you to use Claude, Augment, or Cursor as a Thomson MO5 expert capable of compiling your code and handling your disk images.
-
-#### 1. Automatic Installation
-
-The project includes automation to configure your environment with a single command:
-
-```bash
-make install-mcp
+```json
+{
+  "mcpServers": {
+    "mo5-rag": {
+      "command": "npx",
+      "args": ["-y", "@thlg057/mo5-rag-mcp"],
+      "env": {
+        "RAG_BASE_URL": "https://retrocomputing-ai.cloud"
+      }
+    }
+  }
+}
 ```
 
-This command will:
+No installation, no path to configure. `npx` downloads and runs the server 
+on the fly. 🎉
 
-- Clone or update the MCP server in your `tools/` folder.
-- Install required Node.js dependencies.
-- Generate your personalized configuration files with absolute paths to your current project.
+Sample configuration files for Claude Desktop, Cursor and Augment are 
+available in the `.mcp-templates/` folder.
 
-#### 2. Activation in Your Agent
+### The full ecosystem
 
-Once installation is complete, you need to tell your agent where to find the server.
-
-👉 Follow the detailed guide: `MCP_SETUP.md` (`./MCP_SETUP.md`) to complete the integration in a few clicks.
-
-### 📂 Project Structure
-
-- `index.js` : MCP server logic (Node.js).
-- `scripts/` : Python conversion engine (`makefd.py`, `fd2sd.py`, `png2mo5.py`).
-- `package.json` : npm dependencies and metadata.
+- 🛠️ **SDK MO5** : https://github.com/thlg057/sdk_mo5
+- 📦 **This template** : https://github.com/thlg057/mo5_template
+- 🤖 **MCP Server** : https://www.npmjs.com/package/@thlg057/mo5-rag-mcp
+- 🌐 **Knowledge base** : https://retrocomputing-ai.cloud

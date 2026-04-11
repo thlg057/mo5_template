@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "mo5-rag": {
+      "command": "npx",
+      "args": ["-y", "@thlg057/mo5-rag-mcp"],
+      "env": {
+        "RAG_BASE_URL": "https://retrocomputing-ai.cloud"
+      }
+    }
+  }
+}
