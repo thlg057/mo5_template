@@ -29,6 +29,8 @@ DISK_IMAGE_SD:= $(OUTPUT_DIR)/$(PROGRAM).sd
 # Variables pour les dépôts
 REPO_SDK     := https://github.com/thlg057/sdk_mo5.git
 REPO_MCP     := https://github.com/thlg057/mo5-mcp-server.git
+LWTOOLS_URL  := https://github.com/thlg057/retro-toolchain-cache/releases/download/v1/lwtools-4.24.tar.gz
+CMOC_URL     := https://github.com/thlg057/retro-toolchain-cache/releases/download/v1/cmoc-0.1.97.tar.gz
 
 # Paramètres du compilateur (Intégration du SDK)
 CMOC         := cmoc
@@ -146,14 +148,14 @@ setup-codespace:
 	pip install Pillow
 	@echo ""
 	@echo "→ Téléchargement et installation de lwtools..."
-	wget -q http://www.lwtools.ca/releases/lwtools/lwtools-4.24.tar.gz
+	wget -q $(LWTOOLS_URL)
 	tar -xzf lwtools-4.24.tar.gz
 	rm lwtools-4.24.tar.gz
 	cd lwtools-4.24 && make && sudo make install && cd ..
 	rm -rf lwtools-4.24
 	@echo ""
 	@echo "→ Téléchargement et installation de CMOC..."
-	wget -q http://gvlsywt.cluster051.hosting.ovh.net/dev/cmoc-0.1.97.tar.gz
+	wget -q $(CMOC_URL)
 	tar -xzf cmoc-0.1.97.tar.gz
 	rm cmoc-0.1.97.tar.gz
 	cd cmoc-0.1.97 && ./configure && make && sudo make install && cd ..
